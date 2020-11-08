@@ -23,7 +23,7 @@
 				</div>
 				<div>
 					<div><label for="doa">Loan application date</label> </div>
-					<div><input type="date" id="doa" name="doa" onfocus="myFunction()" readonly> </div>
+					<div><input type="date" id="doa" name="doa" readonly> </div>
 				</div>
 				<div>
 					<div><label for="purpose">Enter purpose</label> </div>

@@ -12,6 +12,7 @@
 	     to logout and admin home page
 	-->
 <jsp:include page="header.jsp"/>
+<hr/>
 <div align="right"><a href="adminhome1.jsp">Admin home</a></div>
 <div align="right"><a href="index.jsp">Logout</a></div>
 

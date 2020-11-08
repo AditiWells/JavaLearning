@@ -1,16 +1,12 @@
 package com.iiht.evaluation.eloan.model;
 
+import java.sql.Date;
+
 public class LoanInfo {
-	private String applno;
+	 private String applno;
 	 private String purpose;
-	 public String getTaxpayer() {
-		return taxpayer;
-	}
-	public void setTaxpayer(String taxpayer) {
-		this.taxpayer = taxpayer;
-	}
-	private int amtrequest;
-	 private String doa;
+	 private int amtrequest;
+	 private Date doa;
 	 private String bstructure;
 	 private String bindicator;
 	 private String address;
@@ -27,7 +23,7 @@ public class LoanInfo {
 	 public LoanInfo() {
 		 
 	 }
-	 public LoanInfo(String applno, String purpose, int amtrequest, String doa, String bstructure, String bindicator, String taxpayer,
+	 public LoanInfo(String applno, String purpose, int amtrequest, Date doa, String bstructure, String bindicator, String taxpayer,
 			String address, String email, String mobile,String status) {
 		super();
 		this.applno = applno;
@@ -61,10 +57,10 @@ public class LoanInfo {
 	public void setAmtrequest(int amtrequest) {
 		this.amtrequest = amtrequest;
 	}
-	public String getDoa() {
+	public Date getDoa() {
 		return doa;
 	}
-	public void setDoa(String doa) {
+	public void setDoa(Date doa) {
 		this.doa = doa;
 	}
 	public String getBstructure() {
@@ -103,5 +99,10 @@ public class LoanInfo {
 	public String getStatus() {
 		return status;
 	}
-
+	public String getTaxpayer() {
+		return taxpayer;
+	}
+	public void setTaxpayer(String taxpayer) {
+		this.taxpayer = taxpayer;
+	}
 }

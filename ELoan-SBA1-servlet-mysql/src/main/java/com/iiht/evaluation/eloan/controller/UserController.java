@@ -3,6 +3,7 @@ package com.iiht.evaluation.eloan.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -116,7 +117,7 @@ private ConnectionDao connDao;
 	private String placeloan(HttpServletRequest request, HttpServletResponse response) throws ServletException, ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 	/* write the code to place the loan information */
-		LoanInfo loan = new LoanInfo("0", request.getParameter("purpose"), Integer.valueOf(request.getParameter("amtrequest")), request.getParameter("doa"), 
+		LoanInfo loan = new LoanInfo("0", request.getParameter("purpose"), Integer.valueOf(request.getParameter("amtrequest")), Date.valueOf(request.getParameter("doa")), 
 				request.getParameter("bstructure"), request.getParameter("bindicator"), request.getParameter("taxpayer"),
 				request.getParameter("address"), request.getParameter("email"), request.getParameter("mobile"),"Initiated");
 		this.connDao.addNewLoan(loan);
@@ -126,16 +127,14 @@ private ConnectionDao connDao;
 	private String application1(HttpServletRequest request, HttpServletResponse response) throws SQLException {
 		// TODO Auto-generated method stub
 	/* write the code to display the loan application page */
-		//ccount num f records in loaninfo and display+1 as app num
 		request.setAttribute("applno", this.connDao.countLoan()+1);
 		return "application.jsp";
 	}
 	private String editLoanProcess(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 		/* write the code to edit the loan info */
-		LocalDate today = LocalDate.now();
 		LoanInfo loan = new LoanInfo(request.getParameter("applno"), request.getParameter("purpose"), Integer.valueOf(request.getParameter("amtrequest")), 
-				request.getParameter("doa"), request.getParameter("bstructure"), request.getParameter("bindicator"), request.getParameter("taxpayer"),
+				Date.valueOf(request.getParameter("doa")), request.getParameter("bstructure"), request.getParameter("bindicator"), request.getParameter("taxpayer"),
 				request.getParameter("address"), request.getParameter("email"), request.getParameter("mobile"),"Initiated");
 		this.connDao.editLoan(loan);
 		
@@ -152,7 +151,6 @@ private ConnectionDao connDao;
 		   and return to index page */
 		User user = new User(request.getParameter("username"), request.getParameter("password"));
 		if(this.connDao.addNewUser(user)) {
-			System.out.println("\nDuplicate entry\n");
 			return "index.jsp";
 		}
 		throw new SQLException("Username already in use.");		
@@ -161,7 +159,6 @@ private ConnectionDao connDao;
 	private String register(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		/* write the code to redirect to register page */
-		
 		return "register.jsp";
 	}
 	private String displaystatus(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException, ClassNotFoundException {
@@ -190,14 +187,12 @@ private ConnectionDao connDao;
 			request.setAttribute("loan", loan);
 			return "editloanui.jsp";
 		}
-		
 		throw new SQLException("Edit is locked. Loan is in '"+loanStatus+"' status.");
 	}
 
 	private String trackloan(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 	/* write a code to return to trackloan page */
-		
 		return "trackloan.jsp";
 	}
 

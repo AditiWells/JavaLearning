@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Track loan</title>
 </head>
 <body>
 	<!-- write the code to display the loan status information 

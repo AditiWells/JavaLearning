@@ -40,7 +40,7 @@ to be entered by manager
 			</div>
 			<div>
 				<div><label for="lcd">Loan closure date</label> </div>
-				<div><input type="date" id="lcd" name="lcd" onhover="myFunction()" readonly></div>
+				<div><input type="date" id="lcd" name="lcd" onfocus="myFunction()" readonly></div>
 			</div>
 			<div>
 				<div><label for="interest">Interest rate</label> </div>

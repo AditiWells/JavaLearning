@@ -39,7 +39,7 @@
 	            <td>Mobile</td>
 	            <td>Status</td>
 	            <% if(pageContext.findAttribute("myCount").equals("Initiated")){
-        		%><td><c:out value="Click to Approve"/></td><%
+        		%><td><c:out value="Click to Approve/Reject"/></td><%
         		}%>
 	        </tr>
 	        <c:forEach items="${loanList}" var="loan">
@@ -55,16 +55,16 @@
 		            <td><c:out value="${loan.email}"/></td>
 		            <td><c:out value="${loan.mobile}"/></td>
 		            <td><c:out value="${loan.status}"/></td>
-		            <td><% if(pageContext.findAttribute("myCount").equals("Initiated")){%>
+		            <% if(pageContext.findAttribute("myCount").equals("Initiated")){%>
+		            <td>
 		            	<form action="admin?action=updatestatus" method="post">
 		            	<input type="hidden" id="applno" name="applno" value=<c:out value="${loan.applno}"/>>
 		            	<input type="hidden" id="status" name="status" value=<c:out value="${loan.status}"/>>
 		            	<input type="submit" name="submit" value="Approve"><input type="submit" name="submit" value="Reject">
 		            	</form>
+		            </td>
 		            	<%} %>
-	        		</td>
-	        		
-			    </tr>
+	        	</tr>
 			</c:forEach>
 	    </table>
 	    </div>

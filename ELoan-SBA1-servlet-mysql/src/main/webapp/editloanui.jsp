@@ -14,10 +14,12 @@
 	LoanInfo loan = (LoanInfo) request.getAttribute("loan");
 
 %>
-
+	
+	<div align="right"><a href="userhome1.jsp">User Home</a></div>
 	<div align="right"><a href="index.jsp">Logout</a></div>
-	<div align="right"><a href="adminhome1.jsp">Admin Home</a></div>
 	<div align=center>
+	<hr/>
+	<h2>Edit your loan!</h2>
 		<form action="user?action=editLoanProcess" method="post">
 			<div>
 				<div><label for="applno">Your application num :</label> </div>
@@ -25,7 +27,7 @@
 			</div>
 			<div>
 				<div><label for="doa">Loan application date</label> </div>
-				<div><input type="date" id="doa" name="doa" value="<%= loan.getDoa() %>" readonly> </div>
+				<div><input type="text" id="doa" name="doa" value="<%= loan.getDoa() %>" readonly> </div>
 			</div>
 			<div>
 				<div><label for="purpose">Enter purpose</label> </div>
@@ -58,6 +60,10 @@
 			<div>
 				<div><label for="mobile">Enter mobile number</label> </div>
 				<div><input type="text" id="mobile" name="mobile" value="<%= loan.getMobile()%>"> </div>
+			</div>
+			<div>
+				<div><label for="mobile">Loan status</label> </div>
+				<div><input type="text" id="status" name="status" value="<%= loan.getStatus()%>" readonly> </div>
 			</div>
 			<div>
 				<div><input type="submit" value="Apply" onclick="success()"> </div>

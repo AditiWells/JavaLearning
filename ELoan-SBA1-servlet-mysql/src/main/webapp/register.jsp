@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Register</title>
+<title>Register User</title>
 </head>
 <body>
 <jsp:include page="header.jsp"/>
@@ -21,18 +21,13 @@
 			<div><input type="password" id="password" name="password"> </div>
 		</div>
 		<div>
-			<div><input type="submit" value="Register" onclick="success()"> </div>
+			<div><input type="submit" value="Register"> </div>
 		</div>
 	</form>
 	</div>
 <hr/>
 <jsp:include page="footer.jsp"/>
 
-<script>
-	function success() {
-	  alert("You have been registered! Login to continue.");
-	}
-</script>
 
 </body>
 </html>

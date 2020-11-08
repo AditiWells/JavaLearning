@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>user home</title>
+<title>User Home</title>
 </head>
 <body>
 <jsp:include page="header.jsp"/>

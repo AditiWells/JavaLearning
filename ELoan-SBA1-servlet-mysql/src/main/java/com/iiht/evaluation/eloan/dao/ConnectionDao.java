@@ -70,6 +70,7 @@ public class ConnectionDao {
 	}
 
 	public boolean addNewUser (User user) throws ClassNotFoundException, SQLException {
+		//Used for new user registration
 		String sql = "INSERT INTO `user` (`username`, `password`) VALUES(?,?)";
 		this.connect();
 		
@@ -79,7 +80,6 @@ public class ConnectionDao {
 		pstmt.setString(2, user.getPassword());
 		
 		if(this.checkUser(user)) {
-			System.out.println("\nDuplicate entry dao\n");
 			return false;
 		}
 		pstmt.executeUpdate();
@@ -90,6 +90,7 @@ public class ConnectionDao {
 	}
 	
 	public boolean validate (User user) throws ClassNotFoundException, SQLException {
+		//Used to validate login
 		String sql = "SELECT * FROM `user` WHERE `username` = ? AND `password` = ?";
 		this.connect();
 		
@@ -105,6 +106,7 @@ public class ConnectionDao {
 	}
 	
 	public boolean checkUser (User user) throws ClassNotFoundException, SQLException {
+		//Used to check if user exists
 		String sql = "SELECT * FROM `user` WHERE `username` = ?";
 		this.connect();
 		
@@ -119,6 +121,7 @@ public class ConnectionDao {
 	}
 	
 	public boolean checkLoan (String applno) throws ClassNotFoundException, SQLException {
+		//Used to check if loan exists with given application no
 		String sql = "SELECT * FROM `loan_info` WHERE `applno` = ?";
 		this.connect();
 		
@@ -133,6 +136,7 @@ public class ConnectionDao {
 	}
 
 	public boolean addNewLoan (LoanInfo loan) throws ClassNotFoundException, SQLException {
+		//Used to create new loan entry in DB
 		String sql = "INSERT INTO `loan_info` (`purpose`, `amtrequest`, `doa`, `bstructure`, `bindicator`, `address`, `email`, `mobile`, `status`, `taxpayer`) VALUES (?,?,?,?,?,?,?,?,?,?)";
 		this.connect();
 		
@@ -140,14 +144,14 @@ public class ConnectionDao {
 		
 		pstmt.setString(1, loan.getPurpose());
 		pstmt.setLong(2, loan.getAmtrequest());
-		pstmt.setString(3, loan.getDoa());
+		pstmt.setDate(3, loan.getDoa());
 		pstmt.setString(4, loan.getBstructure());
 		pstmt.setString(5, loan.getBindicator());
 		pstmt.setString(6, loan.getAddress());
 		pstmt.setString(7, loan.getEmail());
 		pstmt.setString(8, loan.getMobile());
 		pstmt.setString(9, loan.getStatus());
-		pstmt.setInt(10, 1);
+		pstmt.setString(10, loan.getTaxpayer());
 		
 		int n = pstmt.executeUpdate();
 		
@@ -160,6 +164,7 @@ public class ConnectionDao {
 	}
 	
 	public int countLoan() throws SQLException {
+		//Used to count number of loans created
 		String sql = "SELECT COUNT(applno) FROM `loan_info`";
 		int n=0;
 		this.connect();
@@ -177,6 +182,7 @@ public class ConnectionDao {
 	}
 	
 	public LoanInfo getLoan (String applno) throws ClassNotFoundException, SQLException {
+		//Fetch loan info based on application number
 		String sql = "SELECT * FROM `loan_info` WHERE `applno` = ?";
 		this.connect();
 		
@@ -186,18 +192,8 @@ public class ConnectionDao {
 		ResultSet rs = pstmt.executeQuery();
 		rs.next();
 		
-		LoanInfo loan = new LoanInfo(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6),rs.getString(7),
-				rs.getString(12),rs.getString(8),rs.getString(9), rs.getString(10),rs.getString(11));
-		
-		/*loan.setApplno(rs.getString(2));
-		loan.setPurpose(rs.getString(3));
-		//loan.setAmtrequest(rs.getInt(4));
-		loan.setBstructure(rs.getString(6));
-		loan.setBindicator(rs.getString(7));
-		loan.setAddress(rs.getString(8));
-		loan.setEmail(rs.getString(9));
-		loan.setMobile(rs.getString(10));
-		*/
+		LoanInfo loan = new LoanInfo(rs.getString(1), rs.getString(2), rs.getInt(3), Date.valueOf(rs.getString(4)), rs.getString(5),rs.getString(6),
+				rs.getString(11),rs.getString(7),rs.getString(8), rs.getString(9),rs.getString(10));
 		pstmt.close();
 		this.disconnect();
 		
@@ -205,6 +201,7 @@ public class ConnectionDao {
 	}
 	
 	public String getLoanStatus(String applno) throws SQLException {
+		//Fetch loan status based on application number
 		String sql = "SELECT `status` FROM `loan_info` WHERE `applno` = (?)";
 		this.connect();
 		
@@ -218,8 +215,8 @@ public class ConnectionDao {
 	}
 	
 	public boolean editLoan(LoanInfo loan) throws SQLException {
+		//Edit loan based on application number
 		String sql = "UPDATE `loan_info` SET `purpose`=?,`amtrequest`=?,`bstructure`=?,`bindicator`=?,`address`=?,`email`=?,`mobile`=?,`taxpayer`=? WHERE `applno` = ?";
-
 		this.connect();
 		
 		PreparedStatement pstmt = this.jdbcConnection.prepareStatement(sql);
@@ -234,7 +231,6 @@ public class ConnectionDao {
 		pstmt.setString(9, loan.getApplno());
 		
 		int n = pstmt.executeUpdate();
-		System.out.println(n);
 		pstmt.close();
 		this.disconnect();
 		
@@ -244,6 +240,7 @@ public class ConnectionDao {
 	}
 	
 	public List<List<LoanInfo>> loanList() throws SQLException{
+		//Generate loan list based on loan status
 		String sql = "SELECT * FROM `loan_info` WHERE `status`=?";
 		List<String> status = new ArrayList<String>();
 		status.add("Initiated");
@@ -252,8 +249,9 @@ public class ConnectionDao {
 		int count=0;
 		
 		List<List<LoanInfo>> listOfLists = new ArrayList<List<LoanInfo>>();
-		listOfLists.add(this.approvedLoanList());
-		
+		if((this.approvedLoanList()).size()>0) {
+			listOfLists.add(this.approvedLoanList());
+		}
 		this.connect();
 		
 		while(count<status.size()) {
@@ -262,24 +260,22 @@ public class ConnectionDao {
 			ResultSet rs = pstmt.executeQuery();
 			List<LoanInfo> loan = new ArrayList<LoanInfo>();
 			while(rs.next()) {
-				loan.add(new LoanInfo(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6),rs.getString(7),
-						rs.getString(12),rs.getString(8),rs.getString(9), rs.getString(10),rs.getString(11)));
+				loan.add(new LoanInfo(rs.getString(1), rs.getString(2), rs.getInt(3), Date.valueOf(rs.getString(4)), rs.getString(5),rs.getString(6),
+						rs.getString(11),rs.getString(7),rs.getString(8), rs.getString(9),rs.getString(10)));
 			}
-			if(loan.size()!=0) {
+			if(loan.size()>0) {
 				listOfLists.add(loan);
 			}
 			pstmt.close();
 			rs.close();
 			count++;
-			//System.out.println(listOfLists.get(count-1).get(0));
 		}
-		
 		this.disconnect();
-		
 		return listOfLists;
 	}
 	
 	public List<LoanInfo> approvedLoanList() throws SQLException{
+		//Generate approved loan list
 		String sql = "SELECT * FROM `approved_loan`";
 		String appsql = "SELECT * FROM `loan_info` WHERE `status`= \"Approved\" AND `applno`=?";
 		List<ApprovedLoan> loan = new ArrayList<ApprovedLoan>();
@@ -294,22 +290,20 @@ public class ConnectionDao {
 		
 		List<LoanInfo> loanList = new ArrayList<LoanInfo>();
 
-		System.out.println(loan.size());
 		for(int i=0;i<loan.size();i++) {
-			System.out.println(loan.get(i).getApplno());
 			PreparedStatement stmt = this.jdbcConnection.prepareStatement(appsql);
 			stmt.setString(1, loan.get(i).getApplno());
 			ResultSet result = stmt.executeQuery();
 			while(result.next()) {
-				loanList.add(new LoanInfo(result.getString(2), result.getString(3), result.getInt(4), result.getString(5), result.getString(6),result.getString(7),
-					result.getString(12),result.getString(8),result.getString(9), result.getString(10),result.getString(11)));
+				loanList.add(new LoanInfo(result.getString(1), result.getString(2), result.getInt(3), Date.valueOf(result.getString(4)), result.getString(5),result.getString(6),
+					result.getString(11),result.getString(7),result.getString(8), result.getString(9),result.getString(10)));
 			}		
 		}
-		System.out.println("approved list"+loanList);
 		return loanList;
 	}
 	
 	public boolean addNewApprovedLoan (ApprovedLoan loan) throws ClassNotFoundException, SQLException {
+		//Add new approved loan
 		String sql = "INSERT INTO `approved_loan` (`applno`, `amotsanctioned`, `loanterm`, `psd`, `lcd`, `emi`) VALUES (?,?,?,?,?,?);";
 		this.connect();
 		PreparedStatement pstmt = this.jdbcConnection.prepareStatement(sql);
@@ -332,9 +326,9 @@ public class ConnectionDao {
 	}
 	
 	public boolean updateApprovedLoan (ApprovedLoan loan) throws ClassNotFoundException, SQLException {
+		//Update approved loan based on application number after calculating emi
 		String sql = "UPDATE `approved_loan` SET `amotsanctioned`=?,`loanterm`=?,`psd`=?,`lcd`=?,`emi`=? WHERE `applno` = ?";
 		this.connect();
-		//update loaninfo db status
 		PreparedStatement pstmt = this.jdbcConnection.prepareStatement(sql);
 		
 		pstmt.setLong(1, loan.getAmotsanctioned());
@@ -355,9 +349,9 @@ public class ConnectionDao {
 	}
 	
 	public boolean updateLoanstatus (String applno, String status) throws ClassNotFoundException, SQLException {
+		//Update loan status based on application number
 		String updateStatus = "UPDATE `loan_info` SET `status`=? WHERE `applno` = ?";
 		this.connect();
-		//update loaninfo db status
 		PreparedStatement pstmt = this.jdbcConnection.prepareStatement(updateStatus);
 		
 		pstmt.setString(1, status);

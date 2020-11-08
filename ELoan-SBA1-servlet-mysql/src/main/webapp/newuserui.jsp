@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Register User</title>
 </head>
 <body>
 	<!-- read user name and password from user to create account

@@ -85,7 +85,6 @@ public class AdminController extends HttpServlet {
 	private String updatestatus(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 		/* write the code for updatestatus of loan and return to admin home page */
-		System.out.println(request.getParameter("submit"));
 		String applno = request.getParameter("applno");
 		String status = request.getParameter("status");
 		LocalDate today = LocalDate.now();
@@ -128,7 +127,6 @@ public class AdminController extends HttpServlet {
 			this.connDao.updateApprovedLoan(loan);
 			return "adminhome1.jsp";
 		}
-		//update loaninfo status to processing
 		throw new SQLException("This loan is not 'Approved'.");
 	}
 	private String process(HttpServletRequest request, HttpServletResponse response) throws SQLException {
@@ -145,10 +143,10 @@ public class AdminController extends HttpServlet {
 	private String listall(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 	/* write the code to display all the loans */
 		List<List<LoanInfo>> listOfLists = this.connDao.loanList();
+		if(listOfLists.size()==0) {
+			throw new SQLException("No loans in database.");			
+		}
 		request.setAttribute("listOfLists", listOfLists);
-		//RequestDispatcher dispatch = request.getRequestDispatcher("listall.jsp");
-		//dispatch.forward(request, response);
-		//System.out.println("approved list"+this.connDao.approvedLoanList());
 		return "listall.jsp";
 	}
 
