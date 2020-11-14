@@ -23,7 +23,7 @@
 				</div>
 				<div>
 					<div><label for="doa">Loan application date</label> </div>
-					<div><input type="date" id="doa" name="doa" readonly> </div>
+					<div><input type="date" id="doa" name="doa" value="<%=request.getAttribute("doa") %>" readonly> </div>
 				</div>
 				<div>
 					<div><label for="purpose">Enter purpose</label> </div>
@@ -64,16 +64,5 @@
 		</div>
 	<hr/>
 	<jsp:include page="footer.jsp"/>
-
-<script>
-	function myFunction() {
-		  var date = new Date();
-		  document.getElementById('doa').valueAsDate = date;
-	}
-	function success() {
-	  alert("Application submitted successfully!");
-	}
-</script>
-
 </body>
 </html>

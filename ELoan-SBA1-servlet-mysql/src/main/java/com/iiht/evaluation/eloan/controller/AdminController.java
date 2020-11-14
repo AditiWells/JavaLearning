@@ -105,6 +105,7 @@ public class AdminController extends HttpServlet {
 		}
 		return "adminhome1.jsp";
 	}
+	@SuppressWarnings("deprecation")
 	private String calemi(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 	/* write the code to calculate emi for given applno and display the details */
@@ -118,7 +119,9 @@ public class AdminController extends HttpServlet {
 			return "calemi.jsp";
 		}
 		else if(loanStatus.equals("Processed")) {
-			ApprovedLoan loan = new ApprovedLoan(request.getParameter("applno"), Integer.valueOf(request.getParameter("amotsanctioned")), Integer.valueOf(request.getParameter("loanterm")),Date.valueOf(request.getParameter("psd")),Date.valueOf(request.getParameter("lcd")) , 0);
+			Date lcd = Date.valueOf(request.getParameter("psd"));
+			lcd.setMonth(lcd.getMonth()+Integer.valueOf(request.getParameter("loanterm")));
+			ApprovedLoan loan = new ApprovedLoan(request.getParameter("applno"), Integer.valueOf(request.getParameter("amotsanctioned")), Integer.valueOf(request.getParameter("loanterm")),Date.valueOf(request.getParameter("psd")),lcd , 0);
 			int interest = Integer.valueOf(request.getParameter("interest"));
 			int termPaymentAmount = 0;
 			termPaymentAmount = (int) (loan.getAmotsanctioned() * Math.pow((1 + interest/100),loan.getLoanterm()));

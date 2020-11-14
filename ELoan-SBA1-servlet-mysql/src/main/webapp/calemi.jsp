@@ -39,10 +39,6 @@ to be entered by manager
 				<div><input type="date" id="psd" name="psd"> </div>
 			</div>
 			<div>
-				<div><label for="lcd">Loan closure date</label> </div>
-				<div><input type="date" id="lcd" name="lcd" onfocus="myFunction()" readonly></div>
-			</div>
-			<div>
 				<div><label for="interest">Interest rate</label> </div>
 				<div><input type="text" id="interest" name="interest" value="10"> </div>
 			</div>
@@ -53,25 +49,5 @@ to be entered by manager
 	</div>
 <hr/>
 <jsp:include page="footer.jsp"/>
-
-<script>
-	function myFunction() {
-		  var psd = document.getElementById('psd');
-		  var lcd = document.getElementById('lcd');
-		  var loanterm =document.getElementById('loanterm');
-		  var loanTermValue =parseInt(loanterm.value);
-		  	  
-		  if(loanterm.value && psd.value){
-			  psdValue = new Date(psd.valueAsDate);
-		  	  
-			  psdValue.setMonth(psdValue.getMonth()+loanTermValue);
-		      lcd.valueAsDate = new Date(psdValue);
-		  }
-	}
-	function success() {
-	  alert("EMI has been generated!");
-	}
-</script>
-
 </body>
 </html>

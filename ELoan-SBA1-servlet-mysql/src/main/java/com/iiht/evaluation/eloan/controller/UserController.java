@@ -103,13 +103,15 @@ private ConnectionDao connDao;
 		User user = new User();
 		user.setUsername(request.getParameter("username"));
 		user.setPassword(request.getParameter("password"));
+		request.getSession().setAttribute("username",user.getUsername());
+		request.getSession().setAttribute("password",user.getUsername());
 		if(user.getUsername().contentEquals("admin") && user.getPassword().contentEquals("admin")) {
 			return "adminhome1.jsp";  
 		}
 		else {
 			boolean check = this.connDao.validate(user);
 			if(check) {
-			return "userhome1.jsp";
+				return "userhome1.jsp";
 			}
 			return "register.jsp";
 		}
@@ -128,6 +130,7 @@ private ConnectionDao connDao;
 		// TODO Auto-generated method stub
 	/* write the code to display the loan application page */
 		request.setAttribute("applno", this.connDao.countLoan()+1);
+		request.setAttribute("doa", LocalDate.now());
 		return "application.jsp";
 	}
 	private String editLoanProcess(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, ClassNotFoundException {

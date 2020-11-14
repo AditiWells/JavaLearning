@@ -9,9 +9,13 @@
 <body>
 	<!-- write the html code to read user credentials and send it to validateservlet
 	    to validate and user servlet's registernewuser method if create new user
-	    account is selected
+	    account is selected  
 	-->
-	
+<%
+request.getSession().setAttribute("username","");
+request.getSession().setAttribute("password","");
+
+%>	
 	<jsp:include page="header.jsp"/>
 	<hr/>
 	<div align=center>
