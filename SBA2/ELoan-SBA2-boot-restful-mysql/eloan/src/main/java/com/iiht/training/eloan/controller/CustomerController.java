@@ -2,9 +2,12 @@ package com.iiht.training.eloan.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,7 @@ import com.iiht.training.eloan.dto.LoanOutputDto;
 import com.iiht.training.eloan.dto.UserDto;
 import com.iiht.training.eloan.dto.exception.ExceptionResponse;
 import com.iiht.training.eloan.exception.CustomerNotFoundException;
+import com.iiht.training.eloan.exception.InvalidDataException;
 import com.iiht.training.eloan.service.CustomerService;
 
 @RestController
@@ -28,7 +32,10 @@ public class CustomerController {
 	private CustomerService customerService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<UserDto> register(@RequestBody UserDto userDto){
+	public ResponseEntity<UserDto> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			throw new InvalidDataException("Information syntax is incorrect. Please review.");
+	    }
 		UserDto userDtoReturn = this.customerService.register(userDto);
 		ResponseEntity<UserDto> response = new ResponseEntity<UserDto>(userDtoReturn, HttpStatus.OK);
 		return response;
@@ -36,8 +43,10 @@ public class CustomerController {
 	
 	@PostMapping("/apply-loan/{customerId}")
 	public ResponseEntity<LoanOutputDto> applyLoan(@PathVariable Long customerId,
-												 @RequestBody LoanDto loanDto){
-		System.out.println("1");
+			@Valid @RequestBody LoanDto loanDto, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			throw new InvalidDataException("Information syntax is incorrect. Please review.");
+	    }
 		LoanOutputDto loanOutputDto = this.customerService.applyLoan(customerId, loanDto);
 		ResponseEntity<LoanOutputDto> response = new ResponseEntity<LoanOutputDto>(loanOutputDto, HttpStatus.OK);
 		return response;

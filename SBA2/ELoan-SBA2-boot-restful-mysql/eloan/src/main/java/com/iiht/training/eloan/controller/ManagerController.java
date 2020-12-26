@@ -2,9 +2,12 @@ package com.iiht.training.eloan.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import com.iiht.training.eloan.dto.SanctionDto;
 import com.iiht.training.eloan.dto.SanctionOutputDto;
 import com.iiht.training.eloan.dto.exception.ExceptionResponse;
 import com.iiht.training.eloan.exception.AlreadyFinalizedException;
+import com.iiht.training.eloan.exception.InvalidDataException;
 import com.iiht.training.eloan.exception.ManagerNotFoundException;
 import com.iiht.training.eloan.service.ManagerService;
 
@@ -39,7 +43,10 @@ public class ManagerController {
 	@PostMapping("/reject-loan/{managerId}/{loanAppId}")
 	public ResponseEntity<RejectDto> rejectLoan(@PathVariable Long managerId,
 												@PathVariable Long loanAppId,
-												@RequestBody RejectDto rejectDto){
+												@Valid @RequestBody RejectDto rejectDto, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			throw new InvalidDataException("Information syntax is incorrect. Please review.");
+	    }
 		RejectDto rejectDtoReturn = this.managerService.rejectLoan(managerId, loanAppId, rejectDto);
 		ResponseEntity<RejectDto> response = new ResponseEntity<RejectDto>(rejectDtoReturn, HttpStatus.OK);
 		return response;
@@ -48,7 +55,10 @@ public class ManagerController {
 	@PostMapping("/sanction-loan/{managerId}/{loanAppId}")
 	public ResponseEntity<SanctionOutputDto> sanctionLoan(@PathVariable Long managerId,
 												@PathVariable Long loanAppId,
-												@RequestBody SanctionDto sanctionDto){
+												@Valid @RequestBody SanctionDto sanctionDto, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			throw new InvalidDataException("Information syntax is incorrect. Please review.");
+	    }
 		SanctionOutputDto sanctionOutputDto = this.managerService.sanctionLoan(managerId, loanAppId, sanctionDto);
 		ResponseEntity<SanctionOutputDto> response = new ResponseEntity<SanctionOutputDto>(sanctionOutputDto, HttpStatus.OK);
 		return response;

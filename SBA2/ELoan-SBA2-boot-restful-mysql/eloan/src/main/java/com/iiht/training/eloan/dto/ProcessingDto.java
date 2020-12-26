@@ -1,11 +1,28 @@
 package com.iiht.training.eloan.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ProcessingDto {
+	@NotNull
+	@Min(1)
 	private Double acresOfLand;
+	
+	@NotNull
+	@Min(1)
 	private Double landValue;
+	
 	private String appraisedBy;
+	
 	private String valuationDate;
+	
+	@NotNull
+	@Size(min=3, max=150)
 	private String addressOfProperty;
+	
+	@NotNull
+	@Min(1)
 	private Double suggestedAmountOfLoan;
 	
 	public ProcessingDto(Double acresOfLand, Double landValue, String appraisedBy, String valuationDate,

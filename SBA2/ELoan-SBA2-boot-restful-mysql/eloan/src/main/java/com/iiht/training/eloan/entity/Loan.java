@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Loan {
@@ -11,15 +14,25 @@ public class Loan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private Long customerId;
+	
 	private String loanName;
+	
 	private Double loanAmount;
+	
 	private String loanApplicationDate;
+	
 	private String businessStructure;
+	
 	private String billingIndicator;
+	
 	private String taxIndicator;
+	
 	private Integer status;
+	
 	private String remark;
+	
 	public Long getId() {
 		return id;
 	}

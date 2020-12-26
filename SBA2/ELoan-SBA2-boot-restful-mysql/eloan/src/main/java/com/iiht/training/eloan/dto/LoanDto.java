@@ -1,13 +1,27 @@
 package com.iiht.training.eloan.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class LoanDto {
 
+	@NotNull
+	@Size(min=3, max=100)
 	private String loanName;
+	
+	@NotNull
+	@Min(1)
 	private Double loanAmount;
+	
 	private String loanApplicationDate;
+	
 	private String businessStructure;
+	
 	private String billingIndicator;
+	
 	private String taxIndicator;
+	
 	public String getLoanName() {
 		return loanName;
 	}

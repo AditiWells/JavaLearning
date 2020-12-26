@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class SanctionInfo {
@@ -11,13 +13,21 @@ public class SanctionInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private Long loanAppId;
+	
 	private Long managerId;
+	
 	private Double loanAmountSanctioned;
+	
 	private Double termOfLoan;
+	
 	private String paymentStartDate;
+	
 	private String loanClosureDate;
+	
 	private Double monthlyPayment;
+	
 	public Long getId() {
 		return id;
 	}

@@ -2,9 +2,12 @@ package com.iiht.training.eloan.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,7 @@ import com.iiht.training.eloan.dto.ProcessingDto;
 import com.iiht.training.eloan.dto.exception.ExceptionResponse;
 import com.iiht.training.eloan.exception.AlreadyProcessedException;
 import com.iiht.training.eloan.exception.ClerkNotFoundException;
+import com.iiht.training.eloan.exception.InvalidDataException;
 import com.iiht.training.eloan.service.ClerkService;
 
 @RestController
@@ -37,7 +41,10 @@ public class ClerkController {
 	@PostMapping("/process/{clerkId}/{loanAppId}")
 	public ResponseEntity<ProcessingDto> processLoan(@PathVariable Long clerkId,
 													 @PathVariable Long loanAppId,
-													 @RequestBody ProcessingDto processingDto) {
+													 @Valid @RequestBody ProcessingDto processingDto, BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			throw new InvalidDataException("Information syntax is incorrect. Please review.");
+	    }
 		ProcessingDto processingDtoReturn = this.clerkService.processLoan(clerkId, loanAppId, processingDto);
 		ResponseEntity<ProcessingDto> response = new ResponseEntity<ProcessingDto>(processingDtoReturn, HttpStatus.OK);
 		return response;
